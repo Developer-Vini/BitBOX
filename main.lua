@@ -1,3 +1,15 @@
+local config = require("config")
+local chart = require("chart")
+
+local game = {}
+local music = nil
+
+function game.load()
+    if love.filesystem.getInfo("music.ogg") then
+        music = love.audio.newSource("music.ogg", "stream")
+    end
+end
+
 function love.load()
     love.window.setTitle("BitBOX")
     lineY = 500
