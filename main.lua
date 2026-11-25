@@ -42,7 +42,7 @@ function game.togglePause()
 end
 
 local function updateClock(dt)
-    game.songTime = game.songTime + * dt
+    game.songTime = game.songTime + dt
 
     if music and not game.musicStarted and game.songTime >= 0 then
         music:play()
@@ -112,15 +112,45 @@ function game.keypressed(key)
     end
 end
 
-function love.draw()
---    love.graphics.print('hello world!', 400, 300); 
-   love.graphics.setColor(1, 1, 1)
-   love.graphics.line(100, lineY, 700, lineY)
+function game.draw()
+
+    local width = config.laneWidht
+
+    for i, lane in ipairs(config.lanes) do
+        local x = config.laneX + (i - 1) * width
+        local r, g, b = lane.color[1], lane.color[2], lane.color[3]
+        local alpha = love.keyboard.isDown(lane.key) and 0.30 or 0.07
+        
+        love.graphics.setColor(r, g, b, alpha)
+        love.graphics.rectangle("fill", x + 2, 0, width - 4, 600)
+        love.graphics.setColor(1, 1, 1)
+        love.graphics.printf(string.upper(lane.key), x, config.lineY + 35, width, "center")
+    end
+
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.line(config.laneX, config.lineY, config.laneX + 4 * width, config.lineY)
+
+    for _, note in ipairs(game.notes) do
+        local y = config.lineY - (note.time - game.songTime) * config.speed
+
+        if not note.done and y > -config.noteHeight and y < 600 + config.noteHeight then 
+            local x = config.laneX + (note.lane - 1) * width
+            love.graphics.setColor(config.lanes[note.lane].color)
+            love.graphics.rectangle("fill", x + 8, y - config.noteHeight / 2, width - 16, config.noteHeight, 6, 6)
+        end
+    end
 
    love.graphics.setColor(0, 0, 1)
-   love.graphics.rectangle("fill", note.x, note.y, note.width, note.height)
-
-   love.graphics.setColor(1, 1, 1)
-   love.graphics.print("score: " .. score, 20, 20)
-   love.graphics.print(message, 20, 50)
+   love.graphics.print("Score: " .. game.score, 20, 20)
+   love.graphics.print("Combo: " .. game.combo, 20, 45)
+   love.graphics.print("Space: break", 20, 550)
+   love.graphics.print("Esc: menu", 20, 570)
+   love.graphics.print(game.message, config.laneX, 250, 4 * width, "center")
+   
+    if game.paused then
+        love.graphics.setColor(0, 0, 0, 0.7)
+        love.graphics.rectangle("fill", 0, 0, 800, 600)
+        love.graphics.setColor(1,1,1)
+        love.graphics.printf("Stoped",0, 290, 800, "center")
+    end
 end
