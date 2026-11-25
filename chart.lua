@@ -14,3 +14,16 @@ local pattern = {
     {20, 1 }, {24, 4 },
 }
 
+function chart.createNotes()
+    local secondPerBeat = 60 / chart.bpm
+    local notes = {}
+    for _, item in ipairs(pattern) do
+        table.insert(notes, {time = chart.ofsset + item[1] * secondPerBeat, lane = item[2], done = false})
+    end
+
+    table.sort(notes, function(a, b) return a.time < b.time end)
+
+    return notes
+end
+
+return chart
