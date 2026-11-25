@@ -13,6 +13,12 @@ function love.load()
 end
 
 function love.update(dt)
+    note.y += note.velocity * dt
+
+    if note.y > 600 then
+        note.y = 0
+        message = "Error you passed straight"
+    end
 end
 
 
