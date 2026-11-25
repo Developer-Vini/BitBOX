@@ -54,6 +54,20 @@ local function updateClock(dt)
     end
 end
 
+local function judge(note, result)
+    note.done = true
+    game.counts[result] = game.counts[result] + 1
+
+    if result == "miss" then
+        game.combo = 0
+    else
+        game.combo = game.combo + 1
+        game.maxCombo = math(game.maxCombo, game.combo)
+        game.score = game.score + config[result .. "Points"]
+    end
+
+    game.message = string.upper(result)
+end
 
 
 function love.keypressed(key)
