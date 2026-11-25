@@ -2,7 +2,7 @@ function love.load()
     love.window.setTitle("BitBOX")
     lineY = 500
     score = 0
-    mensage = "Press SPACE"
+    message = "Press SPACE"
     note = {
         x = 375,
         y = 0,
@@ -21,6 +21,20 @@ function love.update(dt)
     end
 end
 
+function love.keypressed(key)
+    if key == "space" then
+        local centerNote = note.y + (note.height /2)
+        local distance = math.abs(centerNote - lineY)
+
+        if distance <= 40 then
+            score += 1
+            message = "GOT IT RIGHT"
+            note.y = 0
+        else
+            message = "out of time"
+        end
+    end
+end
 
 function love.draw()
    love.graphics.print('hello world!', 400, 300); 
