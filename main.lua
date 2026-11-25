@@ -13,7 +13,7 @@ function love.load()
 end
 
 function love.update(dt)
-    note.y += note.velocity * dt
+    note.y = note.y + note.velocity * dt
 
     if note.y > 600 then
         note.y = 0
@@ -27,7 +27,7 @@ function love.keypressed(key)
         local distance = math.abs(centerNote - lineY)
 
         if distance <= 40 then
-            score += 1
+            score = score + 1
             message = "GOT IT RIGHT"
             note.y = 0
         else
@@ -37,5 +37,14 @@ function love.keypressed(key)
 end
 
 function love.draw()
-   love.graphics.print('hello world!', 400, 300); 
+--    love.graphics.print('hello world!', 400, 300); 
+   love.graphics.setColor(1, 1, 1)
+   love.graphics.line(100, lineY, 700, lineY)
+
+   love.graphics.setColor(0, 0, 1)
+   love.graphics.rectangle("fill", note.x, note.y, note.width, note.height)
+
+   love.graphics.setColor(1, 1, 1)
+   love.graphics.print("score: " .. score, 20, 20)
+   love.graphics.print(message, 20, 50)
 end
