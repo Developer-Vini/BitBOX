@@ -41,14 +41,20 @@ function game.togglePause()
     end
 end
 
-function love.update(dt)
-    note.y = note.y + note.velocity * dt
+local function updateClock(dt)
+    game.songTime = game.songTime + * dt
 
-    if note.y > 600 then
-        note.y = 0
-        message = "Error you passed straight"
+    if music and not game.musicStarted and game.songTime >= 0 then
+        music:play()
+        game.musicStarted =  true
+        game.songTime = 0
+    end
+    if music and music:isPlaying() then
+        game.songTime = music:tell()
     end
 end
+
+
 
 function love.keypressed(key)
     if key == "space" then
