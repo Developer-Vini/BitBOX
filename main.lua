@@ -30,6 +30,16 @@ function game.start()
         miss = 0
     }
 end
+function game.togglePause()
+    game.paused = not game.paused
+    if music and game.musicStarted then
+        if game.paused then
+            music:pause()
+        elseif game.songTime < music:getDuration() then
+            music:play()
+        end
+    end
+end
 
 function love.update(dt)
     note.y = note.y + note.velocity * dt
