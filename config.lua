@@ -1,4 +1,4 @@
-function love.configuration(config)
+function love.configurationWindow(config)
     config.window.title = "BitBOX"
     config.window.width = 800
     config.window.height = 600
