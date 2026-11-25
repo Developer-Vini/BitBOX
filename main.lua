@@ -70,17 +70,22 @@ local function judge(note, result)
 end
 
 
-function love.keypressed(key)
-    if key == "space" then
-        local centerNote = note.y + (note.height /2)
-        local distance = math.abs(centerNote - lineY)
+function game.keypressed(key)
+    if game.paused then return end
 
-        if distance <= 40 then
-            score = score + 1
-            message = "GOT IT RIGHT"
-            note.y = 0
-        else
-            message = "out of time"
+    for laneIndex, lane in ipairs(config.lanes) do
+        if key == lane.key then
+            for _, note in ipairs(game.notes) do
+                if not note.done and note.lane == laneIndex then
+                    local diff = math.abs(game.songTime - note.time)
+                    if diff <= config.perfectWindow then
+                        judge(note, "perfect")
+                    elseif diff <= config.goodWindow then
+                        judge(note, "good")
+                    end
+                    break
+                end
+            end
         end
     end
 end
