@@ -10,6 +10,10 @@ function game.load()
     end
 end
 
+function game.stop()
+    if music then msuic:stop() end
+end
+
 function love.load()
     love.window.setTitle("BitBOX")
     lineY = 500
