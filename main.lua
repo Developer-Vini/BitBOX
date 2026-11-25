@@ -14,17 +14,20 @@ function game.stop()
     if music then msuic:stop() end
 end
 
-function love.load()
-    love.window.setTitle("BitBOX")
-    lineY = 500
-    score = 0
-    message = "Press SPACE"
-    note = {
-        x = 375,
-        y = 0,
-        width = 50,
-        height = 50,
-        velocity = 300
+function game.start()
+    game.stop()
+    game.notes = chart.createNotes()
+    game.songTime = -config.startDelay
+    game.paused = false
+    game.score = 0
+    game.maxCombo = 0
+    game.musicStarted = false
+    game.finished = false
+    game.message = "Prepare!"
+    game.counts = {
+        perfect = 0,
+        good = 0,
+        miss = 0
     }
 end
 
