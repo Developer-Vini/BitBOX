@@ -53,6 +53,29 @@ local function updateClock(dt)
         game.songTime = music:tell()
     end
 end
+function game.update(dt)
+    if game.paused then return end
+
+    updateClock(dt)
+
+    local pending = 0
+
+    for _, note in ipairs(game.notes) do
+        if not note.done then
+            if game.songTime - note.time > config.goodWindow then
+                judge(note, "miss")
+            else 
+                pending = pending + 1
+            end
+        end
+    end
+
+    local last = game.notes[#game.notes]
+    if pending == 0 and game.songTime > last.time + 2 then
+        game.finished = true
+        game.stop()
+    end
+end
 
 local function judge(note, result)
     note.done = true
@@ -68,7 +91,6 @@ local function judge(note, result)
 
     game.message = string.upper(result)
 end
-
 
 function game.keypressed(key)
     if game.paused then return end
