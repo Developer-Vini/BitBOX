@@ -1,6 +1,7 @@
 local chart = {
     bpm = 130,
     ofsset = 0,
+    duration = 150,
 }
 
 local pattern = {
@@ -17,8 +18,31 @@ local pattern = {
 function chart.createNotes()
     local secondPerBeat = 60 / chart.bpm
     local notes = {}
-    for _, item in ipairs(pattern) do
-        table.insert(notes, {time = chart.ofsset + item[1] * secondPerBeat, lane = item[2], done = false})
+    local patternBeats = 28
+    local totalBeats = chart.duration / secondPerBeat
+
+    local sortGenera = love.math.newRandomGenerator(12345)
+    local lastLane = nil
+    
+    for start = 0, totalBeats, patternBeats do
+        for _, item in ipairs(pattern) do
+            local time = chart.ofsset + (start + item[1]) * secondPerBeat
+
+            if time <= chart.duration - 2 then
+                local lane
+
+                if lastLane == nil then
+                    lane = sortGenera:random(1, 4)
+                else
+                    lane = sortGenera:random(1, 3)
+                    if lane >= lastLane then
+                        lane = lane + 1
+                    end
+                end
+                lastLane = lane
+                table.insert(notes, {time = time , lane = item[2], done = false})
+            end
+        end
     end
 
     table.sort(notes, function(a, b) return a.time < b.time end)
