@@ -11,7 +11,7 @@ function game.load()
 end
 
 function game.stop()
-    if music then msuic:stop() end
+    if music then music:stop() end
 end
 
 function game.start()
@@ -20,6 +20,7 @@ function game.start()
     game.songTime = -config.startDelay
     game.paused = false
     game.score = 0
+    game.combo = 0
     game.maxCombo = 0
     game.musicStarted = false
     game.finished = false
@@ -53,6 +54,22 @@ local function updateClock(dt)
         game.songTime = music:tell()
     end
 end
+
+local function judge(note, result)
+    note.done = true
+    game.counts[result] = game.counts[result] + 1
+
+    if result == "miss" then
+        game.combo = 0
+    else
+        game.combo = game.combo + 1
+        game.maxCombo = math.max(game.maxCombo, game.combo)
+        game.score = game.score + config[result .. "Points"]
+    end
+
+    game.message = string.upper(result)
+end
+
 function game.update(dt)
     if game.paused then return end
 
@@ -75,21 +92,6 @@ function game.update(dt)
         game.finished = true
         game.stop()
     end
-end
-
-local function judge(note, result)
-    note.done = true
-    game.counts[result] = game.counts[result] + 1
-
-    if result == "miss" then
-        game.combo = 0
-    else
-        game.combo = game.combo + 1
-        game.maxCombo = math(game.maxCombo, game.combo)
-        game.score = game.score + config[result .. "Points"]
-    end
-
-    game.message = string.upper(result)
 end
 
 function game.keypressed(key)
@@ -145,7 +147,7 @@ function game.draw()
    love.graphics.print("Combo: " .. game.combo, 20, 45)
    love.graphics.print("Space: break", 20, 550)
    love.graphics.print("Esc: menu", 20, 570)
-   love.graphics.print(game.message, config.laneX, 250, 4 * width, "center")
+   love.graphics.printf(game.message, config.laneX, 250, 4 * width, "center")
    
     if game.paused then
         love.graphics.setColor(0, 0, 0, 0.7)
@@ -154,3 +156,5 @@ function game.draw()
         love.graphics.printf("Stoped",0, 290, 800, "center")
     end
 end
+
+return game
