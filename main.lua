@@ -61,7 +61,7 @@ function love.draw()
         game.draw()
     elseif state == "results" then
         centerText("Finished", 80, fonts.big)
-        centerText("Score:" .. game.score, 200, 220)
+        centerText("Score:" .. game.score, 200, fonts.normal)
         centerText("Perfect: " .. game.counts.perfect, 300, fonts.normal)
         centerText("Combo: " .. game.maxCombo, 240, fonts.normal)
         centerText("Good: " ..game.counts.good, 330, fonts.normal)

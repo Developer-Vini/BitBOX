@@ -1,7 +1,7 @@
 local chart = {
     bpm = 130,
     ofsset = 0,
-    duration = 150,
+    duration = 5,
 }
 
 local pattern = {
@@ -12,7 +12,7 @@ local pattern = {
     {14, 2 }, {14, 4 },
     {16, 1 }, {16.5,1}, { 17, 2}, {18, 4 }, {18.5,4}, {19, 4},
     {20, 1 }, {21, 3 }, { 22, 2}, {23, 4 },
-    {20, 1 }, {24, 4 },
+    {24, 1 }, {24, 4 },
 }
 
 function chart.createNotes()
@@ -40,7 +40,7 @@ function chart.createNotes()
                     end
                 end
                 lastLane = lane
-                table.insert(notes, {time = time , lane = item[2], done = false})
+                table.insert(notes, {time = time , lane = lane, done = false})
             end
         end
     end
@@ -51,3 +51,4 @@ function chart.createNotes()
 end
 
 return chart
+
