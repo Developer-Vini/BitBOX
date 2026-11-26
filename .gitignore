@@ -6,6 +6,9 @@ luac.out
 *.zip
 *.tar.gz
 
+.build/
+BitBox.love
+
 # Object files
 *.o
 *.os
